@@ -3,6 +3,13 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+
+  --flow-canvas: #f7f7f8;
+  --flow-panel: #ffffff;
+  --flow-border: #e4e4e7;
+  --flow-edge: #94a3b8;
+  --flow-accent: #0ea5e9;
+  --flow-minimap-mask: rgb(240 240 243 / 0.7);
 }
 
 @theme inline {
@@ -16,11 +23,58 @@
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
+
+    --flow-canvas: #111113;
+    --flow-panel: #18181b;
+    --flow-border: #27272a;
+    --flow-edge: #71717a;
+    --flow-minimap-mask: rgb(10 10 12 / 0.7);
   }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), system-ui, sans-serif;
+}
+
+/* ---- React Flow tweaks ---------------------------------------------------- */
+
+.react-flow {
+  --xy-background-color: var(--flow-canvas);
+  --xy-background-pattern-color: color-mix(in srgb, var(--flow-edge) 55%, transparent);
+  --xy-minimap-background-color: var(--flow-panel);
+  --xy-controls-button-background-color: var(--flow-panel);
+  --xy-controls-button-border-color: var(--flow-border);
+  --xy-selection-background-color: rgb(14 165 233 / 0.08);
+  --xy-selection-border: 1px solid var(--flow-accent);
+}
+
+.react-flow__node {
+  font-family: var(--font-sans), system-ui, sans-serif;
+}
+
+/* Connection dots: hidden until you hover or select a node, like Figma. */
+.flow-handle.react-flow__handle {
+  width: 10px;
+  height: 10px;
+  border: 2px solid var(--flow-accent);
+  background: #fff;
+  opacity: 0;
+  transition: opacity 120ms ease;
+}
+
+.react-flow__node:hover .flow-handle,
+.react-flow__node.selected .flow-handle {
+  opacity: 1;
+}
+
+.flow-handle.react-flow__handle:hover {
+  background: var(--flow-accent);
+}
+
+/* Keep connector labels and bend dots above shapes, so a connector that runs
+   behind a shape can still be grabbed and bent around it. */
+.react-flow__edgelabel-renderer {
+  z-index: 2000;
 }
